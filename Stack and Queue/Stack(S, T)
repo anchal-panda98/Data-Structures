@@ -1,0 +1,70 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct Stack {
+    int top;
+    int* data;
+    int size;
+};
+
+typedef struct Stack stack;
+
+stack* createStack(int size) {
+    stack *S = (stack*)malloc(sizeof(stack));
+    S->size = size;
+    S->top = -1;
+    S->data = (int*)malloc(sizeof(int)*S->size);
+    return S;
+}
+
+int isFull(stack *S) {
+    return S->top == S->size - 1;
+}
+
+int isEmpty(stack *S) {
+    return S->top == -1;
+}
+
+void push(stack *S, int item) {
+    if(isFull(S))
+        return;
+    S->data[++S->top] = item;
+}
+
+int pop(stack *S) {
+    if(isEmpty(S))
+        return;
+    return S->data[S->top--];
+}
+
+void display(stack *S) {
+    if(isEmpty(S))
+        return;
+    int top = 0;
+    while(top != S->size) {
+        printf("%d\n", S->data[top]);
+        top++;
+    }
+}
+
+void transfer(stack *S, stack *T) {
+    push(S,1);
+    push(S,2);
+    push(S,3);
+    push(S,4);
+    push(S,5);
+    display(S);
+    printf("\n");
+    push(T, pop(S));
+    push(T, pop(S));
+    push(T, pop(S));
+    push(T, pop(S));
+    push(T, pop(S));
+    display(T);
+}
+
+int main() {
+    stack *S = createStack(5);
+    stack *T = createStack(5);
+    transfer(S,T);
+}
