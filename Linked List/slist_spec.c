@@ -1,104 +1,319 @@
 /*
- * Main :
- * 1. Insert node at first
- * 2. Insert node at last
- * 3. Insert node at position
- * 4. Delete Node from any Position
- * 5. Search Element in the linked list
- * 6. Display List from Beginning to end
- * 7. Display List in reverse using Recursion
- * 8. Count Number of Elements in the List
- * 9. Finding the Maximum and Minimum elements in the List
- */
+ *	Author : Deepak
+ *	Date   : 23 August 2019 
+ *	Specification file for Single Linked List
+ *	Contain test cases to test various functionalities
+ *	of Single Linked List.
+*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include "Slist.h"
 
-#include<stdio.h>
-#include "slist_assignment.c"
+/* test case to check creation of empty slist variable */
+void test_empty_list()
+{
+	slist s = slist_new();
+	slist *list = &s;
+	assert (slist_length(list) == 0);
+}
 
- int main()
- {
-    int ch, length, max_element, min_element;
-    char ans = 'Y';
+/*	test case to check adding node from 'head' position
+ *	finding length of list and lookup functions
+*/
 
-    while (ans == 'Y'||ans == 'y')
-    {
-        printf("\n---------------------------------\n");
-        printf("\nOperations on singly linked list\n");
-        printf("\n---------------------------------\n");
-        printf("\n1.Insert node at first");
-        printf("\n2.Insert node at last");
-        printf("\n3.Insert node at position");
-        //printf("\n4.Sorted Linked List in Ascending Order");
-        printf("\n4.Delete Node from any Position");
-        //printf("\n5.Update Node Value");
-        printf("\n5.Search Element in the linked list");
-        printf("\n6.Display List from Beginning to end");
-        printf("\n7.Display List from end using Recursion");
-        printf("\n8.Count Number of Elements in the List");
-        printf("\n9.Finding the Maximum and Minimum elements in the List");
-        printf("\n10.Exit\n");
-        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        printf("\nEnter your choice");
-        scanf("%d", &ch);
+void print_list(slist *list){
+	Node *temp;
+	for(temp = list->head; temp != NULL; temp = temp->next)
+		printf("%d->",temp->data);
+	printf("\n");
+}
+void test_addition_at_head()
+{
+	slist s = slist_new();
+	slist *list = &s;
+	list = insert_front(list, 10);
+	assert (slist_length(list) == 1);
+	
+	list = insert_front(list, 20);
+	list = insert_front(list, 30);
+	list = insert_front(list, 40);
+	list = insert_front(list, 50);
+	assert (slist_length(list) == 5);
+	assert (slist_lookup(list, 30));
 
-        switch (ch)
-        {
-        case 1:
-            printf("\n...Inserting node at first...\n");
-            insert_node_first();
-            break;
-        case 2:
-            printf("\n...Inserting node at last...\n");
-            insert_node_last();
-            break;
-        case 3:
-            printf("\n...Inserting node at position...\n");
-            insert_node_pos();
-            break;
-        /*case 4:
-            printf("\n...Sorted Linked List in Ascending Order...\n");
-            sorted_ascend();
-            break;*/
-        case 4:
-            printf("\n...Deleting Node from any Position...\n");
-            delete_pos();
-            break;
-        /*case 5:
-            printf("\n...Updating Node Value...\n");
-            update_val();
-            break;*/
-        case 5:
-            printf("\n...Searching Element in the List...\n");
-            search();
-            break;
-        case 6:
-            printf("\n...Displaying List From Beginning to End...\n");
-            display();
-            break;
-        case 7:
-            printf("\n...Displaying List From End using Recursion...\n");
-            rev_display(first);
-            break;
-        case 8:
-            printf("\n...Counting number of elements in the List...\n");
-            length = list_length(first);
-            printf("Number of elements in the List = %d", length);
-            break;
-        case 9:
-            printf("\n...Maximum & Minimum number of Elements in the List ...\n");
-            max_element = maximum_list(first);
-            min_element = minimum_list(first);
-            printf("Maximum element = %d and Minimum element = %d", max_element, min_element);
-            break;
-        case 10:
-            printf("\n...Exiting...\n");
-            return 0;
-            break;
-        default:
-            printf("\n...Invalid Choice...\n");
-            break;
-        }
-        printf("\nYOU WANT TO CONTINUE (Y/N)");
-        scanf(" %c", &ans);
-    }
-    return 0;
- }
+}
+
+void test_addition_at_tail(){
+	slist s = slist_new();
+	slist *list = &s;
+	list = insert_rear(list,10);
+	assert(slist_length(list) == 1);
+
+	list = insert_rear(list,20);
+	list = insert_rear(list,30);
+	list = insert_rear(list,40);
+	assert (slist_length(list) == 4);
+	assert (slist_lookup(list, 20));
+}
+
+void test_deletion_at_head(){
+	slist s = slist_new();
+	slist *list = &s;
+	list = insert_front(list, 10);
+	assert (slist_length(list) == 1);
+	
+	list = insert_front(list, 20);
+	list = insert_front(list, 30);
+	delete_front(list);
+	assert (slist_length(list) == 2);
+	assert (~(slist_lookup(list, 10)));
+	delete_front(list);
+	assert (slist_length(list) == 1);
+	assert (~(slist_lookup(list, 20)));
+
+}
+
+void test_deletion_at_tail(){
+	slist s = slist_new();
+	slist *list = &s;
+	list = insert_front(list, 10);
+	assert (slist_length(list) == 1);
+	
+	list = insert_front(list, 20);
+	list = insert_front(list, 30);
+	delete_rear(list);
+	assert (slist_length(list) == 2);
+	assert (~(slist_lookup(list, 30)));
+	delete_rear(list);
+	assert (slist_length(list) == 1);
+	assert (~(slist_lookup(list, 20)));
+}
+
+void test_max(){
+	slist s = slist_new();
+	slist *list = &s;
+
+	assert(slist_max(list) == -2147483646);
+
+	list = insert_front(list, 10);
+	assert (slist_length(list) == 1);
+
+	list = insert_rear(list,20);
+	assert(slist_length(list) == 2);
+
+	assert(slist_max(list) == 20);
+}
+
+void test_min(){
+	slist s = slist_new();
+	slist *list = &s;
+
+	assert(slist_min(list) == 2147483647);
+
+	list = insert_front(list, 10);
+	assert (slist_length(list) == 1);
+
+	list = insert_rear(list,20);
+	assert(slist_length(list) == 2);
+
+	assert(slist_min(list) == 10);
+
+}
+
+void test_insert_after(){
+	slist s = slist_new();
+	slist *list = &s;
+
+	list = insert_front(list, 10);
+	assert (slist_length(list) == 1);
+
+	list = insert_rear(list,20);
+	assert(slist_length(list) == 2);	
+
+	assert (slist_lookup(list, 10));
+	slist_insert_after(list,30,10);
+	
+	assert (slist_length(list) == 3);
+	assert (slist_lookup(list, 30));
+
+	assert (slist_lookup(list, 20));
+	slist_insert_after(list,40,20);
+	assert(list->tail->data == 40);
+	assert (slist_length(list) == 4);
+	assert (slist_lookup(list, 40));
+
+}
+
+void test_delete_ele(){
+	slist s = slist_new();
+	slist *list = &s;
+
+	list = insert_front(list, 10);
+	assert (slist_length(list) == 1);
+
+	assert(slist_lookup(list,10)); //deleting node in list with single node
+	slist_delete_ele(list,10);
+	assert(slist_length(list)==0);
+	assert(list->head== NULL && list->tail== NULL);	
+	assert(~slist_lookup(list,10));
+
+	list = insert_rear(list,20);
+	assert(slist_length(list) == 1);
+
+	list = insert_front(list, 30);
+	assert (slist_length(list) == 2);
+
+	list = insert_rear(list,40);
+	assert(slist_length(list) == 3);
+
+	assert(slist_lookup(list,30)); // deleting head node
+	slist_delete_ele(list,30);
+	assert(slist_length(list)==2);
+	assert(list->head->data==20);
+	assert(~slist_lookup(list,30));
+
+	list = insert_front(list, 30);
+	assert (slist_length(list) == 3);
+
+	assert(slist_lookup(list,20)); // deleting middle node
+	slist_delete_ele(list,20);
+	assert(slist_length(list)==2);
+	assert(~slist_lookup(list,20));	
+
+	assert(slist_lookup(list,40)); // deleting tail node
+	slist_delete_ele(list,40);
+	assert(slist_length(list)==1);
+	assert(list->tail->data==30);
+	assert(~slist_lookup(list,40));
+
+}
+
+void test_reverse(){
+	slist s = slist_new();
+	slist *list = &s;
+	
+	list = insert_rear(list, 10);
+	assert (slist_length(list) == 1);
+	
+	list = insert_rear(list, 20);
+	assert (slist_length(list) == 2);
+
+	list = insert_rear(list, 30);
+	assert (slist_length(list) == 3);
+
+	list = insert_rear(list, 40);
+	assert (slist_length(list) == 4);
+
+	list = insert_rear(list, 50);
+	assert (slist_length(list) == 5);
+	assert (slist_lookup(list, 30));
+
+	Node *temp;
+	/*for(temp = list->head;temp!=NULL;temp = temp->next)
+		printf("%d->",temp->data );
+*/
+	slist_reverse(list);
+
+	int i;
+
+	for(i = 50, temp = list->head; i<=50, temp!=NULL; i-=10, temp = temp->next){
+		//printf("%d->",temp->data );
+		assert(temp->data == i);
+	}
+
+}
+
+void test_issame(){
+	slist s1 = slist_new();
+	slist *list1 = &s1;
+
+	slist s2 = slist_new();
+	slist *list2 = &s2;
+
+	list1 = insert_rear(list1, 10);
+	assert (slist_length(list1) == 1);
+	
+	list1 = insert_rear(list1, 20);
+	assert (slist_length(list1) == 2);
+
+	list1 = insert_rear(list1, 30);
+	assert (slist_length(list1) == 3);
+
+	list2 = insert_rear(list2, 10);
+	assert (slist_length(list2) == 1);
+	
+	list2 = insert_rear(list2, 20);
+	assert (slist_length(list2) == 2);
+
+	list2 = insert_rear(list2, 30);
+	assert (slist_length(list2) == 3);
+
+	int i =slist_same(list1,list2);
+
+	assert(i == 1);
+
+}
+
+void test_unique(){
+	slist s1 = slist_new();
+	slist *list = &s1;
+
+	list = insert_rear(list, 10);
+	assert(slist_length(list)==1);
+
+	list = insert_rear(list,10);
+	assert(slist_length(list)==2);
+
+	list = insert_rear(list, 20);
+	assert(slist_length(list)==3);
+
+	list = insert_rear(list, 20);
+	assert(slist_length(list)==4);
+
+	list = unique(list);
+	//printf("%u",list);
+	assert(slist_lookup(list, 10));
+	assert(slist_lookup(list,20));
+
+	print_list(list);
+	printf("%d",list->length);
+	printf("%d\n", slist_length(list));			// print testing
+
+	assert(slist_length(list)==2);
+
+}
+
+
+
+int main()
+{
+	test_empty_list();
+	test_addition_at_head();
+	test_addition_at_tail();
+	test_deletion_at_head();
+	test_deletion_at_tail();
+	test_max();				// question 2
+	test_min();				
+	test_insert_after();	// question 3
+	test_delete_ele();		// question 4
+	test_reverse();			// question 5
+	test_issame();
+	
+	return 0;
+}
+
+/*
+ *	Running your programs. Assume that already you have
+ *	'slist.h', 'slist.c' and 'slist_spec.c' files.
+ *
+ *	gcc slist.c slist_spec.c -o slist
+ *
+ *	If you get errors, fix them. Otherwise you have exe file
+ *	with name 'slist' (due to -o slist option used during compilation)
+ *	
+ *	Running exe file:	./a.out slist
+ *	If you don't get any message in terminal, code executed perfectly
+ *	( No news good news!!!!!!!)
+ *
+*/
